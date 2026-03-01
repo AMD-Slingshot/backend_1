@@ -1,13 +1,12 @@
 # Core Web Framework
 fastapi==0.104.1
-uvicorn[standard]==0.24.0
+uvicorn==0.24.0
 python-multipart==0.0.6
-starlette==0.27.0
 
 # AI & ML
 google-generativeai==0.3.2
 gTTS==2.4.0
-Pillow==10.1.0
+Pillow==9.5.0
 
 # HTTP & API
 requests==2.31.0
