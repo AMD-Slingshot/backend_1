@@ -16,6 +16,11 @@ class PosterRequest(BaseModel):
     tone: str = "formal"  # formal, fun, technical
     target_audience: str = "general public"
     call_to_action: str = "Register Now"
+    # New fields
+    registration_link: str = ""
+    organization_name: str = ""
+    prizes: str = ""
+    contact_info: str = ""
 
 @router.post("/generate-poster")
 async def create_poster(request: PosterRequest):
@@ -39,10 +44,14 @@ async def create_poster(request: PosterRequest):
             theme_color=request.theme_color,
             tone=request.tone,
             target_audience=request.target_audience,
-            call_to_action=request.call_to_action
+            call_to_action=request.call_to_action,
+            organization_name=request.organization_name,
+            registration_link=request.registration_link,
+            prizes=request.prizes,
+            contact_info=request.contact_info
         )
         
-        # Generate announcement script and audio
+        # Generate announcement script and audio with marketing content
         announcement = generate_announcement_script(
             title=request.title,
             description=request.description,
@@ -52,7 +61,9 @@ async def create_poster(request: PosterRequest):
             time=request.time,
             tone=request.tone,
             target_audience=request.target_audience,
-            call_to_action=request.call_to_action
+            call_to_action=request.call_to_action,
+            organization_name=request.organization_name,
+            prizes=request.prizes
         )
         
         # Convert paths to URLs
@@ -61,7 +72,8 @@ async def create_poster(request: PosterRequest):
         return {
             "poster_url": poster_url,
             "announcement_script": announcement["script"],
-            "announcement_audio": announcement["audio_url"]
+            "announcement_audio": announcement["audio_url"],
+            "marketing": announcement["marketing"]
         }
     
     except HTTPException:
