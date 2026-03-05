@@ -1,6 +1,12 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 from app.services.gemini_service import generate_text
 from app.services.tts_service import text_to_speech
 from fastapi import HTTPException
+
+API_URL = os.getenv("API_URL")
 
 def generate_announcement_script(
     title: str,
@@ -93,7 +99,7 @@ Make sure all content is engaging, professional, and tailored to {target_audienc
         
         # Generate audio from script (markdown will be cleaned in TTS)
         audio_path = text_to_speech(script)
-        audio_url = f"http://localhost:8000/{audio_path}"
+        audio_url = f"{API_URL}/{audio_path}"
         
         return {
             "script": script,
