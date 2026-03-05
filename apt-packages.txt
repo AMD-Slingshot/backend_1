@@ -5,4 +5,5 @@ liblcms2-dev
 libopenjp2-7-dev
 libtiff-dev
 libwebp-dev
+fonts-dejavu-core
 

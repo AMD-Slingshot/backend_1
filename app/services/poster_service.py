@@ -54,25 +54,33 @@ def generate_poster(
         accent_color = tuple(min(255, int(c * 0.7)) for c in theme_rgb)
         draw.rectangle([(0, 0), (width, 20)], fill=accent_color)
         
-        # Try to load fonts (fallback to default if not available)
-        try:
-            org_font = ImageFont.truetype("arialbd.ttf", 40)
-            title_font = ImageFont.truetype("arialbd.ttf", 90)
-            tagline_font = ImageFont.truetype("arial.ttf", 45)
-            heading_font = ImageFont.truetype("arialbd.ttf", 50)
-            body_font = ImageFont.truetype("arial.ttf", 42)
-            small_font = ImageFont.truetype("arial.ttf", 36)
-            cta_font = ImageFont.truetype("arialbd.ttf", 60)
-            prize_font = ImageFont.truetype("arialbd.ttf", 48)
-        except:
-            org_font = ImageFont.load_default()
-            title_font = ImageFont.load_default()
-            tagline_font = ImageFont.load_default()
-            heading_font = ImageFont.load_default()
-            body_font = ImageFont.load_default()
-            small_font = ImageFont.load_default()
-            cta_font = ImageFont.load_default()
-            prize_font = ImageFont.load_default()
+        # Load fonts - try Windows fonts first, then Linux fonts
+        def load_font(size, bold=False):
+            # Windows fonts
+            windows_fonts = ["arialbd.ttf" if bold else "arial.ttf"]
+            # Linux/Unix fonts (DejaVu installed via apt-packages.txt)
+            linux_fonts = [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf"
+            ]
+            
+            for font_path in windows_fonts + linux_fonts:
+                try:
+                    return ImageFont.truetype(font_path, size)
+                except:
+                    continue
+            
+            # Fallback - create a proper sized default
+            return ImageFont.load_default()
+        
+        org_font = load_font(40, bold=True)
+        title_font = load_font(90, bold=True)
+        tagline_font = load_font(45, bold=False)
+        heading_font = load_font(50, bold=True)
+        body_font = load_font(42, bold=False)
+        small_font = load_font(36, bold=False)
+        cta_font = load_font(60, bold=True)
+        prize_font = load_font(48, bold=True)
         
         y_position = 60
         padding = 60
