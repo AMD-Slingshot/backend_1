@@ -1,8 +1,11 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.services.poster_service import generate_poster
 from app.services.announcement_service import generate_announcement_script
-
+API_URL = os.getenv("API_URL")
 router = APIRouter()
 
 class PosterRequest(BaseModel):
@@ -67,7 +70,7 @@ async def create_poster(request: PosterRequest):
         )
         
         # Convert paths to URLs
-        poster_url = f"http://localhost:8000/{poster_path}"
+        poster_url = f"{API_URL}/{poster_path}"
         
         return {
             "poster_url": poster_url,

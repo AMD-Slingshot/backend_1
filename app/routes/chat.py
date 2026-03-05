@@ -1,8 +1,11 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from app.services.gemini_service import generate_text
 from app.services.tts_service import text_to_speech
-
+API_URL = os.getenv("API_URL")
 router = APIRouter()
 
 class ChatRequest(BaseModel):
@@ -25,7 +28,7 @@ async def chat(request: ChatRequest):
         if request.return_audio:
             audio_path = text_to_speech(reply)
             # Convert to URL path
-            audio_url = f"http://localhost:8000/{audio_path}"
+            audio_url = f"{API_URL}/{audio_path}"
         
         return {
             "reply": reply,
